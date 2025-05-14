@@ -5,11 +5,10 @@ var app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
-
+const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const { name } = require('ejs');
 mongoose.connect('mongodb+srv://bhumi:test%40123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList');
-
 
 const tryschema = new mongoose.Schema({
      name: String,
@@ -81,6 +80,6 @@ app.post("/delete-todo/:id", async function(req, res) {
         res.status(500).send("Failed to delete item");
     }
 });
-app.listen(3000, function() {
-    console.log("server is running on port 3000");
+app.listen(PORT, function() {
+    console.log("server is running on port " + PORT);
 });
