@@ -8,7 +8,7 @@ app.use(express.static('public'));
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const { name } = require('ejs');
-const uri='mongodb+srv://bhumi:test%40123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList';
+const uri='mongodb+srv://bhumi:8WDWcQc5%56bndZ@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList';
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 async function run() {
   try {
