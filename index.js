@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const { name } = require('ejs');
 mongoose.connect('mongodb+srv://bhumi:test%40123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList');
 
+
 const tryschema = new mongoose.Schema({
      name: String,
      priority: String
