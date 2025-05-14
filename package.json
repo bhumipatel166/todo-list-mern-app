@@ -1,0 +1,25 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhumipatel166/todo-list.git"
+  },
+  "author": "Bhumi Patel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bhumipatel166/todo-list/issues"
+  },
+  "homepage": "https://github.com/bhumipatel166/todo-list#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mongoose": "^8.14.3"
+  }
+}

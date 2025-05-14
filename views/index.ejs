@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Todo List</title>
+</head>
+<body>
+
+    <%- include('header') %>
+
+    <div class="box">
+        <!-- Todo Creation Box -->
+        <form action="/add-todo" method="POST">
+            <input type="text" name="title" placeholder="Enter Todo" required>
+            <select name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+            <button type="submit"><i class="fa-solid fa-plus"></i></button>
+        </form>
+
+        <!-- Filter Todos by Priority -->
+        <form action="/" method="GET" class="filter-form">
+            <select name="priority">
+                <option value="All">All</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+            <button type="submit"><i class="fa-solid fa-filter"></i></button>
+        </form>
+
+        <!-- Todo List Display -->
+        <div class="todo-list">
+            <% todos.forEach(todo => { %>
+                <div class="todo-item">
+                    <form action="/edit-todo/<%= todo._id %>" method="POST" class="edit-form">
+                        <input type="text" name="title" value="<%= todo.name %>" required>
+                        <select name="priority">
+                            <option value="Low" <%= todo.priority === "Low" ? "selected" : "" %>>Low</option>
+                            <option value="Medium" <%= todo.priority === "Medium" ? "selected" : "" %>>Medium</option>
+                            <option value="High" <%= todo.priority === "High" ? "selected" : "" %>>High</option>
+                        </select>
+                        <button type="submit"><i class="fa-solid fa-pencil"></i></button>
+                    </form>
+
+                    <form action="/delete-todo/<%= todo._id %>" method="POST" class="delete-form">
+                        <button type="submit"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <%- include('footer') %>
+
+</body>
+</html>
