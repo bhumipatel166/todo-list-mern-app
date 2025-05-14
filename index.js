@@ -8,18 +8,20 @@ app.use(express.static('public'));
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const { name } = require('ejs');
-mongoose.connect('mongodb+srv://bhumi:test%40123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList');
 
 
-const tryschema = new mongoose.Schema({
-     name: String,
-     priority: String
-});
-const item = mongoose.model('task', tryschema);
-const todo = new item({ 
-    name: "create some videos",
-    priority: "High"
-});
+mongoose.connect('mongodb+srv://bhumi:test%40123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    // Define your schemas and models here
+    const tryschema = new mongoose.Schema({ name: String, priority: String });
+    const item = mongoose.model('task', tryschema);
+
+    // Start your server or perform database operations here
+  })
+  .catch(err => {
+    console.error('Database connection error:', err);
+  });
+
 //todo.save();
 
 app.get('/', async (req, res) => {
