@@ -24,7 +24,12 @@ mongoose.connect(uri, clientOptions)
     const Item = mongoose.model('task', tryschema);
 
     // Define your routes here
-    app.get('/', async (req, res) => {
+   
+  })
+  .catch(err => {
+    console.error("Failed to connect to MongoDB", err);
+  });
+ app.get('/', async (req, res) => {
       try {
         const selectedPriority = req.query.priority;
         let filter = {};
@@ -42,14 +47,9 @@ mongoose.connect(uri, clientOptions)
     });
 
     // Start the server after routes are defined
-    app.listen(PORT, () => {
+app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error("Failed to connect to MongoDB", err);
-  });
-
+});
 app.post("/add-todo", async (req, res) => {
     try {
         const itemName = req.body.title;
