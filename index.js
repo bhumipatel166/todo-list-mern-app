@@ -8,48 +8,47 @@ app.use(express.static('public'));
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const uri = "mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList";
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-async function run() {
-  try {
-    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-    await mongoose.connect(uri, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await mongoose.disconnect();
-  }
-}
-run().catch(console.dir);
+const clientOptions = {
+  serverApi: { version: '1', strict: true, deprecationErrors: true }
+};
 
+mongoose.connect(uri, clientOptions)
+  .then(() => {
+    console.log("Connected to MongoDB!");
 
-const tryschema = new mongoose.Schema({
-     name: String,
-     priority: String
-});
-const item = mongoose.model('task', tryschema);
-const todo = new item({ 
-    name: "create some videos",
-    priority: "High"
-});
-//todo.save();
+    // Define your schema and model here
+    const tryschema = new mongoose.Schema({
+      name: String,
+      priority: String
+    });
+    const Item = mongoose.model('task', tryschema);
 
-app.get('/', async (req, res) => {
-     try {
+    // Define your routes here
+    app.get('/', async (req, res) => {
+      try {
         const selectedPriority = req.query.priority;
         let filter = {};
 
         if (selectedPriority && selectedPriority !== 'All') {
-            filter.priority = selectedPriority;
+          filter.priority = selectedPriority;
         }
 
-        const foundItems = await item.find(filter);
+        const foundItems = await Item.find(filter);
         res.render('index', { todos: foundItems });
-    } catch (err) {
+      } catch (err) {
         console.log(err);
         res.status(500).send("Internal Server Error");
-    }
-});
+      }
+    });
+
+    // Start the server after routes are defined
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error("Failed to connect to MongoDB", err);
+  });
 
 app.post("/add-todo", async (req, res) => {
     try {
