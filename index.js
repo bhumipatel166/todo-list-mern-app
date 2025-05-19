@@ -61,7 +61,7 @@ app.put("/edit-todo/:id", async function(req,res){
         const itemName = req.body.title;
         const itemPriority = req.body.priority;
 
-        await Item.update(itemId, { name: itemName, priority: itemPriority },{overwrite: true});
+        await Item.updateOne(itemId, { name: itemName, priority: itemPriority });
         console.log("Successfully updated");
         res.redirect("/");
     } catch (err) {
