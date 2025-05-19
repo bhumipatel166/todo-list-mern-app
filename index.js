@@ -9,10 +9,7 @@ app.use(methodOverride('_method'));
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/todoList?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/todoList?retryWrites=true&w=majority');
 
 
 const tryschema = new mongoose.Schema({
