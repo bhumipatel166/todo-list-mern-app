@@ -54,7 +54,7 @@ app.post("/add-todo", async (req, res) => {
         res.status(500).send("Failed to add todo");
     }
 });
-app.post("/edit-todo/:id", async function(req,res){
+app.put("/edit-todo/:id", async function(req,res){
     try {
         const itemId = req.params.id;
         const itemName = req.body.title;
@@ -69,7 +69,7 @@ app.post("/edit-todo/:id", async function(req,res){
     }
     
 });
-app.post("/delete-todo/:id", async function(req, res) {
+app.delete("/delete-todo/:id", async function(req, res) {
     try {
         const itemId = req.params.id;
         await Item.findByIdAndDelete(itemId); // ✅ use this
