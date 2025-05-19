@@ -5,6 +5,7 @@ var app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
+app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList');
@@ -60,7 +61,7 @@ app.put("/edit-todo/:id", async function(req,res){
         const itemName = req.body.title;
         const itemPriority = req.body.priority;
 
-        await Item.findByIdAndUpdate(itemId, { name: itemName, priority: itemPriority });
+        await Item.updateOne(itemId, { name: itemName, priority: itemPriority });
         console.log("Successfully updated");
         res.redirect("/");
     } catch (err) {
@@ -72,7 +73,7 @@ app.put("/edit-todo/:id", async function(req,res){
 app.delete("/delete-todo/:id", async function(req, res) {
     try {
         const itemId = req.params.id;
-        await Item.findByIdAndDelete(itemId); // ✅ use this
+        await Item.deleteOne(itemId); // ✅ use this
         console.log("Successfully deleted");
         res.redirect("/");
     } catch (err) {
