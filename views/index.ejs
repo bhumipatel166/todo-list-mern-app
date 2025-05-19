@@ -38,7 +38,7 @@
         <div class="todo-list">
             <% todos.forEach(todo => { %>
                 <div class="todo-item">
-                    <form action="/edit-todo/<%= todo._id %>" method="POST" class="edit-form">
+                    <form action="/edit-todo/<%= todo._id %>?_method=PUT" method="POST" class="edit-form">
                         <input type="text" name="title" value="<%= todo.name %>" required>
                         <select name="priority">
                             <option value="Low" <%= todo.priority === "Low" ? "selected" : "" %>>Low</option>
@@ -48,7 +48,7 @@
                         <button type="submit"><i class="fa-solid fa-pencil"></i></button>
                     </form>
 
-                    <form action="/delete-todo/<%= todo._id %>" method="POST" class="delete-form">
+                    <form action="/delete-todo/<%= todo._id %>?_method=DELETE" method="POST" class="delete-form">
                         <button type="submit"><i class="fa-solid fa-trash"></i></button>
                     </form>
                 </div>

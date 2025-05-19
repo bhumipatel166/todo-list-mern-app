@@ -1,14 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const methodOverride = require('method-override');
 var app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList',useNewUrlParser=true);
+mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/todoList?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 
 const tryschema = new mongoose.Schema({
@@ -55,35 +59,31 @@ app.post("/add-todo", async (req, res) => {
         res.status(500).send("Failed to add todo");
     }
 });
-app.put("/edit-todo/:id", async function(req,res){
-    try {
-        const itemId = req.params.id;
-        const itemName = req.body.title;
-        const itemPriority = req.body.priority;
+app.put("/edit-todo/:id", async (req, res) => {
+    const { id } = req.params;
+    const { title, priority } = req.body;
 
-        await Item.updateOne(itemId, { name: itemName, priority: itemPriority });
+    try {
+        await Item.findByIdAndUpdate(id, { name: title, priority });
         console.log("Successfully updated");
         res.redirect("/");
     } catch (err) {
         console.error("Update failed:", err);
         res.status(500).send("Failed to update item");
     }
-    
 });
-app.delete("/delete-todo/:id", async function(req, res) {
+
+// DELETE - Delete Todo
+app.delete("/delete-todo/:id", async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const { id } = req.params;
-        const deletedItem = await Item.deleteOne(id);
-
-        if (!deletedItem) {
-            return res.status(404).json({ message: "Item not found" });
-        }
-
+        await Item.findByIdAndDelete(id);
         console.log("Successfully deleted");
-        res.json({ message: "Deleted successfully" });
+        res.redirect("/");
     } catch (err) {
         console.error("Delete failed:", err);
-        res.status(500).json({ message: "Failed to delete item" });
+        res.status(500).send("Failed to delete item");
     }
 });
 
