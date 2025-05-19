@@ -8,7 +8,7 @@ app.use(express.static('public'));
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList');
+mongoose.connect('mongodb+srv://bhumi:test123@todolist.ijxvwuf.mongodb.net/?retryWrites=true&w=majority&appName=todoList',useNewUrlParser=true);
 
 
 const tryschema = new mongoose.Schema({
@@ -61,7 +61,7 @@ app.put("/edit-todo/:id", async function(req,res){
         const itemName = req.body.title;
         const itemPriority = req.body.priority;
 
-        await Item.updateOne(itemId, { name: itemName, priority: itemPriority });
+        await Item.update(itemId, { name: itemName, priority: itemPriority },{overwrite: true});
         console.log("Successfully updated");
         res.redirect("/");
     } catch (err) {
@@ -72,15 +72,21 @@ app.put("/edit-todo/:id", async function(req,res){
 });
 app.delete("/delete-todo/:id", async function(req, res) {
     try {
-        const itemId = req.params.id;
-        await Item.deleteOne(itemId); // ✅ use this
+        const { id } = req.params;
+        const deletedItem = await Item.deleteOne(id);
+
+        if (!deletedItem) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+
         console.log("Successfully deleted");
-        res.redirect("/");
+        res.json({ message: "Deleted successfully" });
     } catch (err) {
         console.error("Delete failed:", err);
-        res.status(500).send("Failed to delete item");
+        res.status(500).json({ message: "Failed to delete item" });
     }
 });
+
 app.listen(PORT, function() {
     console.log("server is running on port " + PORT);
 });
