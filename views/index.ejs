@@ -39,13 +39,14 @@
             <% todos.forEach(todo => { %>
                 <div class="todo-item">
                     <form action="/edit-todo/<%= todo._id %>?_method=PUT" method="POST" class="edit-form">
-                        <input type="text" name="title" value="<%= todo.name %>" required>
-                        <select name="priority">
+                        <input type="text" name="title" value="<%= todo.name %>" disabled required>
+                        <select name="priority" disabled>
                             <option value="Low" <%= todo.priority === "Low" ? "selected" : "" %>>Low</option>
                             <option value="Medium" <%= todo.priority === "Medium" ? "selected" : "" %>>Medium</option>
                             <option value="High" <%= todo.priority === "High" ? "selected" : "" %>>High</option>
                         </select>
-                        <button type="submit"><i class="fa-solid fa-pencil"></i></button>
+                        <button type="button" class="edit-btn"><i class="fa-solid fa-pencil"></i></button>
+                        <button type="submit" class="save-btn" style="display: none;"><i class="fa-solid fa-check"></i></button>
                     </form>
 
                     <form action="/delete-todo/<%= todo._id %>?_method=DELETE" method="POST" class="delete-form">
@@ -53,7 +54,36 @@
                     </form>
                 </div>
             <% }) %>
+            <script>
+                document.querySelectorAll('.edit-btn').forEach((button) => {
+                    button.addEventListener('click', function () {
+                        const form = this.closest('form');
+                        const inputs = form.querySelectorAll('input, select');
+                        const saveBtn = form.querySelector('.save-btn');
+
+                        inputs.forEach((input) => input.disabled = false); // Enable editing
+                        this.style.display = 'none'; // Hide edit button
+                        saveBtn.style.display = 'inline-block'; // Show save (submit) button
+                    });
+                });
+            </script>
+
         </div>
+
+        <!-- No Todos Message -->
+        <% if (todos.length === 0) { %>
+            <div class="no-todos">
+                <p>No todos available. Please add a new todo.</p>
+            </div>
+        <% } %>
+
+        <!-- No Todos Message -->
+        <% if (todos.length === 0) { %>
+            <div class="no-todos">
+                <p>No todos available</p>
+            </div>
+        <% } %>
+
     </div>
 
     <%- include('footer') %>
